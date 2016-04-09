@@ -1,0 +1,11 @@
+Package: edfr
+Type: Package
+Title: Calculate EDF Test Statistics for Goodness of Fit
+Version: 0.1.0
+Authors@R: person("Ken","Butler",email="butler@utsc.utoronto.ca",role=c("aut","cre"))
+Description: Calculate and obtain P-values for testing null hypothesis that
+    data come from specified distribution, either with specified or with estimated
+    parameters
+License: GPL-3
+LazyData: TRUE
+RoxygenNote: 5.0.1
