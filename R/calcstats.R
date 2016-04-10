@@ -40,16 +40,19 @@ calc.stat=function(statfun,x,dist=punif,...) {
 #' Obtain simulations of test statistic under assumption that parameters known (for getting P-values).
 #' Case 3 (all parameters unknown) coming up later. Add examples.
 #'
-#' @param n Sample size for each simulated test statistic
 #' @param statfun Name of statistic to be simulated (as in help for \code{calc.stat})
+#' @param n Sample size for each simulated test statistic
 #' @param nsim Number of simulations to run (default 10000)
-#' @param dist Name of R function to draw random samples from distribution (eg. \code{rnorm})
+#' @param dist Name of R function to draw random samples from distribution (eg. \code{rnorm}). Defaults to uniform (\code{runif}).
 #' @param ... parameters for distribution
 
-sim.stat=function(n,statfun,nsim=10000,dist,...) {
+sim.stat=function(statfun,n,nsim=10000,dist=runif,...) {
   # dist this time has r on front
   # how to handle case 3? Need to estimate parameters from each simulated data set
   # have to handle it case by case, I think
   z=sort(dist(n,...))
   calc.stat(statfun,z)
 }
+
+
+# do I enter a string or a function name?
