@@ -61,20 +61,28 @@ a2=function(x) {
   -n-sum(total)/n
 }
 
+#' @export
+
 dmod=function(x){
   n=length(x)
   d(x)*(sqrt(n)+0.12+0.11/sqrt(n))
 }
+
+#' @export
 
 vmod=function(x) {
   n=length(x)
   v(x)*(sqrt(n)+0.155+0.24/sqrt(n))
 }
 
+#' @export
+
 w2mod=function(x) {
   n=length(x)
   (w2(x)-0.4/n+0.6/n^2)/(1+1/n)
 }
+
+#' @export
 
 u2mod=function(x) {
   n=length(x)

@@ -21,7 +21,8 @@ Calculate test statistic value (and P-value?) for testing fit to specified distr
 \details{
 Allowable test statistics are \code{d} (Kolmogorov D), \code{v} (Kuiper V), \code{w2} (Cramer-von Mises W-squared),
   \code{a2} (Anderson-Darling A-squared), \code{u2} (Watson U-squared). Statistics \code{v} and \code{u2} are invariant to choice
-  of origin, so can be used for data on a circle (for example, for testing uniformity of times of day).
+  of origin, so can be used for data on a circle (for example, for testing uniformity of times of day). Also modified versions
+  \code{dmod}, \code{vmod}, \code{w2mod}, \code{u2mod} for use with Table 4.3 of D'Agostino and Stephens (1986).
 }
 \examples{
 data(leghorn)
@@ -30,7 +31,10 @@ calc.stat(a2,leghorn$z1)
 # test original data for normality with mean 200 and SD 35
 calc.stat("a2",leghorn$x,pnorm,200,35)
 # obtain all statistics
-my.stats=c("d","v","w2","a2","u2")
+my.stats=c("d","v","w2","a2","u2","dmod","vmod","w2mod","u2mod")
 sapply(my.stats,calc.stat,leghorn$x,pnorm,200,35)
+# data that are actually beta-distributed
+data(beta_data)
+sapply(my.stats,calc.stat,beta_data)
 }
 
