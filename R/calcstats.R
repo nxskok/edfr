@@ -35,6 +35,22 @@ calc.stat=function(statfun,x,dist=punif,...) {
 
 # simulation
 
+#' One simulation of a test statistic from given distribution with given parameters (case 0)
+#'
+#' @param statfun Name of statistic to be simulated (as in help for \code{calc.stat})
+#' @param n Sample size for each simulated test statistic
+#' @param sim_dist Name of R function to draw random samples from distribution (eg. \code{rnorm}). Defaults to uniform (\code{runif}).
+#' @param calc_dist Name of R cumulative distribution to calculate test statistic for (eg. \code{pnorm}). Defaults to uniform (\code{punif}).
+#' @param ... parameters for distribution, apparently same for simulation and calculation
+#' @export
+
+sim.stat.1=function(statfun,n,sim_dist=runif,calc_dist=punif,...) {
+  r=sim_dist(n,...)
+  stat=calc.stat(statfun,r,calc_dist,...)
+  stat
+}
+
+
 #' Simulate EDF statistics under Case 0
 #'
 #' Obtain simulations of test statistic under assumption that parameters known (for getting P-values).
@@ -55,4 +71,3 @@ sim.stat=function(statfun,n,nsim=10000,dist=runif,...) {
 }
 
 
-# do I enter a string or a function name?
