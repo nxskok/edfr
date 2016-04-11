@@ -1,9 +1,50 @@
 context("Test statistics")
 
-# compare test statistics and P-values with textbook
+# compare test statistics and P-values with textbook (some of them are not that close)
+# note use of scale=1 for expect_equal to get absolute difference
 
-test_that("a2 with leghorn data", {
-  w=p.val("a2",leghorn$x,nsim=1e4,sim=rnorm,calc=pnorm,200,35)
-  expect_equal(w$test.stat,1.017,tolerance=0.001)
+test_that("test stats with leghorn data", {
+  w=p.val("d",leghorn$x,nsim=1e4,sim=rnorm,calc=pnorm,200,35)
+  expect_equal(w$test.stat,0.171,tolerance=0.005,scale=1)
   expect_gt(w$p.value,0.25)
+  w=p.val("v",leghorn$x,nsim=1e4,sim=rnorm,calc=pnorm,200,35)
+  expect_equal(w$test.stat,0.216,tolerance=0.002,scale=1)
+  expect_gt(w$p.value,0.25)
+  w=p.val("w2",leghorn$x,nsim=1e4,sim=rnorm,calc=pnorm,200,35)
+  expect_equal(w$test.stat,0.187,tolerance=0.004,scale=1)
+  expect_gt(w$p.value,0.20)
+  w=p.val("u2",leghorn$x,nsim=1e4,sim=rnorm,calc=pnorm,200,35)
+  expect_equal(w$test.stat,0.051,tolerance=0.002,scale=1)
+  expect_gt(w$p.value,0.25)
+  w=p.val("a2",leghorn$x,nsim=1e4,sim=rnorm,calc=pnorm,200,35)
+  expect_equal(w$test.stat,1.017,tolerance=0.002,scale=1)
+  expect_gt(w$p.value,0.25)
+})
+
+test_that("modified test stats", {
+  w=p.val("dmod",leghorn$x,nsim=1e4,sim=rnorm,calc=pnorm,200,35)
+  expect_equal(w$test.stat,0.790,tolerance=0.001,scale=1)
+  expect_gt(w$p.value,0.25)
+  w=p.val("vmod",leghorn$x,nsim=1e4,sim=rnorm,calc=pnorm,200,35)
+  expect_equal(w$test.stat,1.011,tolerance=0.002,scale=1)
+  expect_gt(w$p.value,0.25)
+  w=p.val("w2mod",leghorn$x,nsim=1e4,sim=rnorm,calc=pnorm,200,35)
+  expect_equal(w$test.stat,0.177,tolerance=0.02,scale=1)
+  expect_gt(w$p.value,0.25)
+  w=p.val("u2mod",leghorn$x,nsim=1e4,sim=rnorm,calc=pnorm,200,35)
+  expect_equal(w$test.stat,0.048,tolerance=0.004,scale=1)
+  expect_gt(w$p.value,0.25)
+})
+
+test_that("P-values with beta data", {
+  w=p.val("d",beta_data,nsim=1e4,sim=runif,calc=punif)
+  expect_lt(w$p.value,0.05)
+  w=p.val("v",beta_data,nsim=1e4,sim=runif,calc=punif)
+  expect_lt(w$p.value,0.05)
+  w=p.val("w2",beta_data,nsim=1e4,sim=runif,calc=punif)
+  expect_lt(w$p.value,0.05)
+  w=p.val("u2",beta_data,nsim=1e4,sim=runif,calc=punif)
+  expect_lt(w$p.value,0.10)
+  w=p.val("a2",beta_data,nsim=1e4,sim=runif,calc=punif)
+  expect_lt(w$p.value,0.05)
 })
