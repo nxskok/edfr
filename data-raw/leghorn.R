@@ -4,7 +4,7 @@ z2=pnorm(x,mean(x),sd(x))
 
 leghorn=data.frame(x,z1,z2)
 
-# also, some beta data for which uniform will be rejected
+# also, some beta data for which uniform will be rejected, just
 
 beta_data=rbeta(50,1,1.2)
 hist(beta_data)
