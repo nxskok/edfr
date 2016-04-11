@@ -59,15 +59,13 @@ sim.stat.1=function(statfun,n,sim_dist=runif,calc_dist=punif,...) {
 #' @param statfun Name of statistic to be simulated (as in help for \code{calc.stat})
 #' @param n Sample size for each simulated test statistic
 #' @param nsim Number of simulations to run (default 10000)
-#' @param dist Name of R function to draw random samples from distribution (eg. \code{rnorm}). Defaults to uniform (\code{runif}).
+#' @param sim_dist Name of R function to draw random samples from distribution (eg. \code{rnorm}). Defaults to uniform (\code{runif}).
+#' @param calc_dist Name of R function to do probability integral transform with (eg. \code{pnorm}). Defaults to uniform (\code{punif}).
 #' @param ... parameters for distribution
+#' @export
 
-sim.stat=function(statfun,n,nsim=10000,dist=runif,...) {
-  # dist this time has r on front
-  # how to handle case 3? Need to estimate parameters from each simulated data set
-  # have to handle it case by case, I think
-  z=sort(dist(n,...))
-  calc.stat(statfun,z)
+sim.stat=function(statfun,n,nsim=10000,sim_dist=runif,calc_dist,...) {
+  replicate(nsim,sim.stat.1(statfun,n,sim_dist,calc_dist,...))
 }
 
 

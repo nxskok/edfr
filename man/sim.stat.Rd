@@ -4,16 +4,18 @@
 \alias{sim.stat}
 \title{Simulate EDF statistics under Case 0}
 \usage{
-sim.stat(n, statfun, nsim = 10000, dist, ...)
+sim.stat(statfun, n, nsim = 10000, sim_dist = runif, calc_dist, ...)
 }
 \arguments{
-\item{n}{Sample size for each simulated test statistic}
-
 \item{statfun}{Name of statistic to be simulated (as in help for \code{calc.stat})}
+
+\item{n}{Sample size for each simulated test statistic}
 
 \item{nsim}{Number of simulations to run (default 10000)}
 
-\item{dist}{Name of R function to draw random samples from distribution (eg. \code{rnorm})}
+\item{sim_dist}{Name of R function to draw random samples from distribution (eg. \code{rnorm}). Defaults to uniform (\code{runif}).}
+
+\item{calc_dist}{Name of R function to do probability integral transform with (eg. \code{pnorm}). Defaults to uniform (\code{punif}).}
 
 \item{...}{parameters for distribution}
 }
