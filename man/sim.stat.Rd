@@ -4,7 +4,8 @@
 \alias{sim.stat}
 \title{Simulate EDF statistics under Case 0}
 \usage{
-sim.stat(statfun, n, nsim = 10000, sim_dist = runif, calc_dist, ...)
+sim.stat(statfun, n, nsim = 10000, sim_dist = runif, calc_dist = punif,
+  ...)
 }
 \arguments{
 \item{statfun}{Name of statistic to be simulated (as in help for \code{calc.stat})}

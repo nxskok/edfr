@@ -64,8 +64,15 @@ sim.stat.1=function(statfun,n,sim_dist=runif,calc_dist=punif,...) {
 #' @param ... parameters for distribution
 #' @export
 
-sim.stat=function(statfun,n,nsim=10000,sim_dist=runif,calc_dist,...) {
+sim.stat=function(statfun,n,nsim=10000,sim_dist=runif,calc_dist=punif,...) {
   replicate(nsim,sim.stat.1(statfun,n,sim_dist,calc_dist,...))
 }
 
-
+#' @export
+p.val=function(statfun,x,nsim=1e4,sim=runif,calc=punif,...) {
+  v=calc.stat(statfun,x,dist=calc,...)
+  vv=sim.stat(statfun,length(x),sim_dist=sim,calc_dist=calc,...)
+  tab=table(vv>=v)
+  p.value=tab[2]/sum(tab)
+  list(test.stat=v,p.value=p.value)
+}
