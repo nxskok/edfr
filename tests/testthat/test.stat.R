@@ -21,6 +21,25 @@ test_that("test stats with leghorn data", {
   expect_gt(w$p.value,0.25)
 })
 
+test_that("testing for uniformity on z1", {
+  w1=calc.stat("d",leghorn$x,pnorm,200,35)
+  w2=calc.stat("d",leghorn$z1)
+  expect_equal(w1,w2)
+  w1=calc.stat("v",leghorn$x,pnorm,200,35)
+  w2=calc.stat("v",leghorn$z1)
+  expect_equal(w1,w2)
+  w1=calc.stat("w2",leghorn$x,pnorm,200,35)
+  w2=calc.stat("w2",leghorn$z1)
+  expect_equal(w1,w2)
+  w1=calc.stat("u2",leghorn$x,pnorm,200,35)
+  w2=calc.stat("u2",leghorn$z1)
+  expect_equal(w1,w2)
+  w1=calc.stat("a2",leghorn$x,pnorm,200,35)
+  w2=calc.stat("a2",leghorn$z1)
+  expect_equal(w1,w2)
+
+})
+
 test_that("modified test stats", {
   w=p.val("dmod",leghorn$x,nsim=1e4,sim=rnorm,calc=pnorm,200,35)
   expect_equal(w$test.stat,0.790,tolerance=0.001,scale=1)
@@ -47,4 +66,24 @@ test_that("P-values with beta data", {
   expect_lt(w$p.value,0.10)
   w=p.val("a2",beta_data,nsim=1e4,sim=runif,calc=punif)
   expect_lt(w$p.value,0.05)
+})
+
+test_that("test stats on circle",{
+  x=c(0.3,0.4,0.5,0.9)
+  y=x-0.25
+  w=calc.stat("d",x)
+  ww=calc.stat("d",y)
+  expect_gt(abs(w-ww),0)
+  w=calc.stat("v",x)
+  ww=calc.stat("v",y)
+  expect_equal(w,ww)
+  w=calc.stat("w2",x)
+  ww=calc.stat("w2",y)
+  expect_gt(abs(w-ww),0)
+  w=calc.stat("u2",x)
+  ww=calc.stat("u2",y)
+  expect_equal(w,ww)
+  w=calc.stat("a2",x)
+  ww=calc.stat("a2",y)
+  expect_gt(abs(w-ww),0)
 })

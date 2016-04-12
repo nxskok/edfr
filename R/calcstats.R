@@ -68,7 +68,16 @@ sim.stat=function(statfun,n,nsim=10000,sim_dist=runif,calc_dist=punif,...) {
   replicate(nsim,sim.stat.1(statfun,n,sim_dist,calc_dist,...))
 }
 
-#' @export
+#' EDF test statistic and P-value
+#'
+#' Calculate EDF test statistic and P-value by simulation
+#'
+#' @param statfun Character string naming test to do
+#' @param x Vector of data
+#' @param nsim Number of  simulations to run for P-value (default 10,000)
+#' @param sim Distribution to simulate from for P-value (r-function)
+#' @param calc XS
+#' #' @export
 p.val=function(statfun,x,nsim=1e4,sim=runif,calc=punif,...) {
   v=calc.stat(statfun,x,dist=calc,...)
   vv=sim.stat(statfun,length(x),sim_dist=sim,calc_dist=calc,...)
