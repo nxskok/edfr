@@ -15,7 +15,10 @@ p.val(statfun, x, nsim = 10000, sim = runif, calc = punif, ...)
 
 \item{sim}{Distribution to simulate from for P-value (r-function)}
 
-\item{calc}{XS
+\item{calc}{Distribution to calculate test statistic for (p-function)}
+
+\item{...}{Parameters for distribution
+
 #' @export}
 }
 \description{
