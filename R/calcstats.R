@@ -7,10 +7,14 @@
 #' @param dist Cumulative distribution function of distribution to be fitted
 #' @param ... parameters to distribution
 #'
-#' @details Allowable test statistics are \code{d} (Kolmogorov D), \code{v} (Kuiper V), \code{w2} (Cramer-von Mises W-squared),
-#'   \code{a2} (Anderson-Darling A-squared), \code{u2} (Watson U-squared). Statistics \code{v} and \code{u2} are invariant to choice
-#'   of origin, so can be used for data on a circle (for example, for testing uniformity of times of day). Also modified versions
-#'   \code{dmod}, \code{vmod}, \code{w2mod}, \code{u2mod} for use with Table 4.3 of D'Agostino and Stephens (1986).
+#' @details Allowable test statistics are \code{d} (Kolmogorov D), \code{v} (Kuiper V),
+#' \code{w2} (Cramer-von Mises W-squared),
+#'   \code{a2} (Anderson-Darling A-squared), \code{u2} (Watson U-squared).
+#'   Statistics \code{v} and \code{u2} are invariant to choice
+#'   of origin, so can be used for data on a circle (for example, for testing
+#'   uniformity of times of day). Also modified versions
+#'   \code{dmod}, \code{vmod}, \code{w2mod}, \code{u2mod} for use with Table 4.2
+#'   of D'Agostino and Stephens (1986).
 #'
 #' @examples
 #' data(leghorn)
@@ -25,6 +29,7 @@
 #' data(beta_data)
 #' sapply(my.stats,calc.stat,beta_data)
 #' @export
+#' @references D'Agostino and Stephens (1986) Goodness of Fit, Chapter 4.
 
 calc.stat=function(statfun,x,dist=punif,...) {
   # dist needs to be a p cdf, with parameters on the end
@@ -85,4 +90,15 @@ p.val=function(statfun,x,nsim=1e4,sim=runif,calc=punif,...) {
   tab=table(vv>=v)
   p.value=tab[2]/sum(tab)
   list(test.stat=v,p.value=p.value)
+}
+
+#' Test statistics and P-values under case 0
+#'
+#' Obtain test statistics and P-values for all statistics under case 0
+#'
+#' @export
+test0=function(x,nsim=1e4,calc=punif,sim=runif,...) {
+  stat.list=c("d","v","w2","u2","a2","dmod","vmod","w2mod","u2mod")
+  v=sapply(stat.list,p.val,x,nsim,calc=calc,sim=sim,...)
+  v
 }
