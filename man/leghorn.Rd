@@ -11,13 +11,13 @@
   \item{z2}{Transformed values based on normal using sample mean and SD}
 }}
 \source{
-D'Agostino and Stephens (1986) page 98
+D'Agostino and Stephens (1986) page 546
 }
 \usage{
 leghorn
 }
 \description{
-Weights of 20 Leghorn chicks
+Weights of 20 Leghorn chicks. Series A.
 }
 \keyword{datasets}
 

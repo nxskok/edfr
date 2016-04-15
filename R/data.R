@@ -1,12 +1,12 @@
 #' @title Leghorn data
-#' @description Weights of 20 Leghorn chicks
+#' @description Weights of 20 Leghorn chicks. Series A.
 #' @format A data frame with three variables:
 #' \describe{
 #'   \item{x}{Weight, in grams}
 #'   \item{z1}{Transformed values based on normal with mean 200 and SD 35}
 #'   \item{z2}{Transformed values based on normal using sample mean and SD}
 #' }
-#' @source D'Agostino and Stephens (1986) page 98
+#' @source D'Agostino and Stephens (1986) page 546
 "leghorn"
 
 #' @title Beta-distributed data
@@ -24,3 +24,28 @@
 #' @format Vector of 4 observations
 #' @source D'Agostino and Stephens (1986) page 107
 "circle"
+
+#' @title Bliss leghorn data series B
+#' @description Weights of 21 leghorn chicks (grams, measured at 21 days). Series A is data \code{leghorn}.
+#' @format Vector of 21 values
+#' @source D'Agostino and Stephens (1986) page 546.
+"blis.b"
+
+#' @title Lethal dose of cinobufagin
+#' @description Lethal dose of drug cinobufagin in units of 10 mg/kg, as determined by titration
+#' to cardiac arrest in individual etherized cats
+#' @format Vector of 25 values
+#' @source D'Agostino and Stephens (1986) page 547.
+"chen"
+
+#' @title Heights of maize plants
+#' @description Heights of maize plants in decimeters (rounded to nearest decimeter)
+#' @format Vector of 530 values
+#' @source D'Agostino and Stephens (1986) page 548.
+"emea"
+
+#' @title Differences in flood stages between two stations
+#' @description Differences in flood stages for two stations on the Fox River, Wisconsin. For testing for Laplace distribution.
+#' @format  Vector of 33 values
+#' @source D'Agostino and Stephens (1986) page 549.
+"baen"
