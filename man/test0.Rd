@@ -6,7 +6,21 @@
 \usage{
 test0(x, nsim = 10000, calc = punif, sim = runif, ...)
 }
+\arguments{
+\item{x}{vector of data}
+
+\item{nsim}{number of simulations to obtain P-value (default 10,000)}
+
+\item{calc}{Cumulative distribution function of null-hypothesis distribution}
+
+\item{sim}{Function  to generate random sample of values from null-hypothesis distribution}
+
+\item{...}{additional parameters for distribution(s)}
+}
+\value{
+vector of all test statistic values, labelled by which statistic each one is
+}
 \description{
-Obtain test statistics and P-values for all statistics under case 0
+Obtain test statistics and P-values for all statistics under case 0, by simulation
 }
 

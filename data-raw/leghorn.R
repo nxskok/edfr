@@ -9,3 +9,8 @@ leghorn=data.frame(x,z1,z2)
 beta_data=rbeta(50,1,1.2)
 hist(beta_data)
 devtools::use_data(beta_data,overwrite = T)
+
+# and also, the circle data on page 107 of the text
+
+circle=c(0.3,0.4,0.5,0.9)
+devtools::use_data(circle)

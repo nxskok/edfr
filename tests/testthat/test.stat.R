@@ -69,7 +69,7 @@ test_that("P-values with beta data", {
 })
 
 test_that("test stats on circle",{
-  x=c(0.3,0.4,0.5,0.9)
+  x=circle
   y=x-0.25
   w=calc.stat("d",x)
   ww=calc.stat("d",y)

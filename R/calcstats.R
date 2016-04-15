@@ -29,7 +29,7 @@
 #' data(beta_data)
 #' sapply(my.stats,calc.stat,beta_data)
 #' @export
-#' @references D'Agostino and Stephens (1986) Goodness of Fit, Chapter 4.
+#' @references D'Agostino and Stephens (1986) Goodness of Fit Techniques, Chapter 4.
 
 calc.stat=function(statfun,x,dist=punif,...) {
   # dist needs to be a p cdf, with parameters on the end
@@ -94,11 +94,20 @@ p.val=function(statfun,x,nsim=1e4,sim=runif,calc=punif,...) {
 
 #' Test statistics and P-values under case 0
 #'
-#' Obtain test statistics and P-values for all statistics under case 0
+#' Obtain test statistics and P-values for all statistics under case 0, by simulation
 #'
+#' @param x vector of data
+#' @param nsim number of simulations to obtain P-value (default 10,000)
+#' @param calc Cumulative distribution function of null-hypothesis distribution
+#' @param sim Function  to generate random sample of values from null-hypothesis distribution
+#' @param ... additional parameters for distribution(s)
+#'
+#' @return vector of all test statistic values, labelled by which statistic each one is
 #' @export
 test0=function(x,nsim=1e4,calc=punif,sim=runif,...) {
   stat.list=c("d","v","w2","u2","a2","dmod","vmod","w2mod","u2mod")
   v=sapply(stat.list,p.val,x,nsim,calc=calc,sim=sim,...)
   v
 }
+
+

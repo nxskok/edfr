@@ -42,6 +42,6 @@ data(beta_data)
 sapply(my.stats,calc.stat,beta_data)
 }
 \references{
-D'Agostino and Stephens (1986) Goodness of Fit, Chapter 4.
+D'Agostino and Stephens (1986) Goodness of Fit Techniques, Chapter 4.
 }
 

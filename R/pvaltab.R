@@ -13,7 +13,7 @@ pval.tab=function(stat,cv,pv) {
   cvs=c(0,cv,1e10)
   pvs=c(1,pv,0)
   i=findInterval(stat,cvs)
-  if (i==0) 1 else cut(pvs,pvs)[i]
+  if (i==0) "1" else as.character(cut(pvs,pvs)[i])
 }
 
 #' P-value for A-squared from table 4.2
@@ -103,4 +103,28 @@ pval.u2=function(stat) {
   pv=c(0.25,0.15,0.10,0.05,0.025,0.01,0.005,0.001)
   pval.tab(stat,cv,pv)
 }
+
+#' calculate test statistics and P-values from table 4.2
+#'
+#' @param x vector of data
+#' @param calc CDF function of distribution to be tested
+#' @param ... parameters for distribution
+#'
+#' @return data frame of test statistics and P-values
+#' @export
+p.val.tab=function(x,calc,...){
+  stat.list=c("d","v","w2","u2","a2")
+  mod.stat.list=c("dmod","vmod","w2mod","u2mod","a2")
+  v=sapply(stat.list,calc.stat,x,dist=calc,...)
+  # get modified stats
+  w=sapply(mod.stat.list,calc.stat,x,dist=calc,...)
+  # get P-values from table
+  pvals=c(pval.d(w[1]),
+          pval.v(w[2]),
+          pval.w2(w[3]),
+          pval.u2(w[4]),
+          pval.a2(w[5]))
+  data.frame(statistic=stat.list,value=v,mod.value=w,p.value=pvals,row.names=NULL)
+}
+
 
