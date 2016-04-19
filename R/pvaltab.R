@@ -19,7 +19,7 @@ pval.tab=function(stat,cv,pv) {
 #' P-value for A-squared from table 4.2
 #'
 #' @param stat Test statistic value
-#' @return P-value interval (as level of factor)
+#' @return P-value interval (as character representation of interval)
 #' @examples
 #' pval.a2(1)
 #' pval.a2(2)
@@ -37,7 +37,7 @@ pval.a2=function(stat) {
 #' P-value for D (modified) from table 4.2
 #'
 #' @param stat Test statistic value
-#' @return P-value interval (as level of factor)
+#' @return P-value interval (as character representation of interval)
 #' @examples
 #' pval.d(1)
 #' pval.d(1.25)
@@ -54,7 +54,7 @@ pval.d=function(stat) {
 #' P-value for V (modified) from table 4.2
 #'
 #' @param stat Test statistic value
-#' @return P-value interval (as level of factor)
+#' @return P-value interval (as character representation of interval)
 #' @examples
 #' pval.v(1.4)
 #' pval.v(1.65)
@@ -72,7 +72,7 @@ pval.v=function(stat) {
 #' P-value for W-squared (modified) from table 4.2
 #'
 #' @param stat Test statistic value
-#' @return P-value interval (as level of factor)
+#' @return P-value interval (as character representation of interval)
 #' @examples
 #' pval.w2(0.2)
 #' pval.w2(0.45)
@@ -89,7 +89,7 @@ pval.w2=function(stat) {
 #' P-value for U-squared (modified) from table 4.2
 #'
 #' @param stat Test statistic value
-#' @return P-value interval (as level of factor)
+#' @return P-value interval (as character representation of interval)
 #' @examples
 #' pval.u2(0.1)
 #' pval.u2(0.175)
@@ -207,7 +207,10 @@ p.val.tab=function(x,calc,...){
   data.frame(statistic=stat.list,value=v,mod.value=w,p.value=pvals,row.names=NULL)
 }
 
-#' calculate test statistics and P-values from table 4.7 (normal, case 3)
+#' Test statistics and table P-values for normality, parameters estimated
+#'
+#' calculate test statistics and P-values from table 4.7 of D'Agostino and Stephens (1986)
+#' (normal, case 3)
 #'
 #' @param x vector of data
 #'
