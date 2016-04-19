@@ -104,7 +104,87 @@ pval.u2=function(stat) {
   pval.tab(stat,cv,pv)
 }
 
-#' calculate test statistics and P-values from table 4.2
+#' P-value for D (unmodified) for normal case 3
+#'
+#' P-value for D for normality when mean and SD estimated
+#' @param stat Test statistic value
+#' @param n sample size
+#' @return P-value interval (as text)
+#' @export
+pval.d.norm3=function(stat,n) {
+  stat.mod=stat*(sqrt(n)-0.01+0.85/sqrt(n))
+  cv=c(0.775,0.819,0.895,0.995,1.035)
+  pv=c(0.15,0.10,0.05,0.025,0.01)
+  pval.tab(stat.mod,cv,pv)
+}
+
+#' P-value for V (unmodified) for normal case 3
+#'
+#' P-value for V for normality when mean and SD estimated
+#' @param stat Test statistic value
+#' @param n sample size
+#' @return P-value interval (as text)
+#' @export
+pval.v.norm3=function(stat,n) {
+  stat.mod=stat*(sqrt(n)+0.05+0.82/sqrt(n))
+  cv=c(1.32,1.386,1.489,1.585,1.693)
+  pv=c(0.15,0.10,0.05,0.025,0.01)
+  pval.tab(stat.mod,cv,pv)
+}
+
+
+#' P-value for W-squared (unmodified) for normal case 3
+#'
+#' P-value for W-squared for normality when mean and SD estimated
+#' @param stat Test statistic value
+#' @param n sample size
+#' @return P-value interval (as text)
+#' @export
+
+pval.w2.norm3=function(stat,n) {
+  stat.mod=stat*(1+0.05/n)
+  cv=c(0.051,0.074,0.091,0.104,0.126,0.148,0.179,0.201)
+  pv=c(0.50,0.25,0.15,0.10,0.05,0.025,0.01,0.005)
+  pval.tab(stat.mod,cv,pv)
+}
+
+
+#' P-value for U-squared (unmodified) for normal case 3
+#'
+#' P-value for U-squared for normality when mean and SD estimated
+#' @param stat Test statistic value
+#' @param n sample size
+#' @return P-value interval (as text)
+#' @export
+
+pval.u2.norm3=function(stat,n) {
+  stat.mod=stat*(1+0.05/n)
+  cv=c(0.048,0.070,0.085,0.096,0.117,0.136,0.164,0.183)
+  pv=c(0.50,0.25,0.15,0.10,0.05,0.025,0.01,0.005)
+  pval.tab(stat.mod,cv,pv)
+}
+
+#' P-value for A-squared (unmodified) for normal case 3
+#'
+#' P-value for A-squared for normality when mean and SD estimated
+#' @param stat Test statistic value
+#' @param n sample size
+#' @return P-value interval (as text)
+#' @export
+
+pval.a2.norm3=function(stat,n) {
+  stat.mod=stat*(1+0.75/n+2.25/n^2)
+  cv=c(0.341,0.470,0.561,0.631,0.752,0.873,1.035,1.159)
+  pv=c(0.50,0.25,0.15,0.10,0.05,0.025,0.01,0.005)
+  pval.tab(stat.mod,cv,pv)
+}
+
+
+
+
+#' Test statistics and P-values from table
+#'
+#' Calculate test statistic and obtain P-value from table 4.2 of D'Agostino and Stephens (1986).
 #'
 #' @param x vector of data
 #' @param calc CDF function of distribution to be tested
@@ -125,6 +205,27 @@ p.val.tab=function(x,calc,...){
           pval.u2(w[4]),
           pval.a2(w[5]))
   data.frame(statistic=stat.list,value=v,mod.value=w,p.value=pvals,row.names=NULL)
+}
+
+#' calculate test statistics and P-values from table 4.7 (normal, case 3)
+#'
+#' @param x vector of data
+#'
+#' @return data frame of test statistics and P-values
+#' @export
+p.val.tab.norm3=function(x){
+  xbar=mean(x)
+  s=sd(x)
+  n=length(x)
+  stat.list=c("d","v","w2","u2","a2")
+  w=sapply(stat.list,calc.stat,x,dist=pnorm,xbar,s)
+  # get P-values from table
+  pvals=c(pval.d.norm3(w[1],n),
+          pval.v.norm3(w[2],n),
+          pval.w2.norm3(w[3],n),
+          pval.u2.norm3(w[4],n),
+          pval.a2.norm3(w[5],n))
+  data.frame(statistic=stat.list,value=w,p.value=pvals,row.names=NULL)
 }
 
 
