@@ -2,7 +2,7 @@
 % Please edit documentation in R/pvaltab.R
 \name{p.val.tab.norm3}
 \alias{p.val.tab.norm3}
-\title{calculate test statistics and P-values from table 4.7 (normal, case 3)}
+\title{Test statistics and table P-values for normality, parameters estimated}
 \usage{
 p.val.tab.norm3(x)
 }
@@ -13,6 +13,7 @@ p.val.tab.norm3(x)
 data frame of test statistics and P-values
 }
 \description{
-calculate test statistics and P-values from table 4.7 (normal, case 3)
+calculate test statistics and P-values from table 4.7 of D'Agostino and Stephens (1986)
+(normal, case 3)
 }
 

@@ -1,0 +1,94 @@
+---
+title: "Testing whether data come from a uniform distribution"
+author: "Ken Butler"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: cites.bib
+vignette: >
+  %\VignetteIndexEntry{Testing whether data come from a uniform distribution}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+We might want to know whether some data come from a uniform distribution. This, as it stands, is an impossible question, because we can never know for sure. But we *can* ask whether some data are *consistent* with having been drawn from a uniform distribution: that is, we can test the null hypothesis that the data were drawn from a uniform distribution, against the diffuse alternative that they were not. (We are thus in the unusual position of hoping *not* to reject the null hypothesis.)
+
+## The empirical distribution function
+
+There are many ways to assess the closeness of data to a hypothesized distribution. @d1986goodness is devoted to this. We focus on their Chapter 4, tests based on the empirical distribution function $F_n(x)$ of a sample of size $n$. This function, evaluated at $x$, is the proportion of values in the sample less than or equal to $x$. $F_n(x)=0$ for $x$ less than the smallest sample value, $F_n(x)=1$ for all $x$ greater than or equal to the largest sample value, and $F_n(x)$ is a step function that increases in steps of $1/n$ each time a data value is encountered.
+
+For example, suppose we observe these data values:
+
+```{r}
+v=c(0.4,0.7,0.8,0.9)
+v
+```
+
+The empirical distribution function (EDF) for these data is
+
+```{r}
+fn=ecdf(v)
+```
+
+which can be plotted, thus:
+
+```{r}
+plot(fn)
+```
+
+It is seen that `fn` jumps in steps of $0.25=1/4$ at 0.4, 0.7, 0.8 and 0.9.
+
+## Comparing the EDF to the uniform distribution
+
+The EDF is an estimator of the underlying population cumulative distribution function $F(x)$. A strategy for testing a hypothesized distribution $F_0(x$) is thus to compare $F_n(x)$ with $F_0(x)$. For the uniform distribution, this takes an especially simple form: $F_0(x)=x$ for $0 \le x \le 1$. The hypothesized distribution function can easily be added to the plot of the EDF, which for our data looks like this:
+
+```{r}
+plot(fn,xlim=c(0,1))
+abline(a=0,b=1,col="red")
+```
+
+Note that the EDF does not correspond well with the hypothesized uniform distribution, since we would expect our data to have more small values and fewer large ones, if a uniform distribution on $(0,1)$ is correct. Thus the EDF is mainly below the uniform distribution function.
+
+@d1986goodness give a number of statistics that summarize the discrepancy between the EDF and the hypothesized distribution. These fall into two classes: the extremum statistics, based on the maximum difference between EDF and hypothesized distribution, and the quadratic statistics, based on an integrated (weighted) squared difference between the two.
+
+The extremum statistics are based on the maximum value of $F_n(x)-F_0(x)$, denoted $D^+$, and minus the minimum value of $F_n(x)-F_0(x)$, denoted $D^-$. In our example, $D^+$ occurs at $x=0.9$, where $F_n(x)=1$ and $F_0(x)=0.9$, so $D^+=1-0.9=0.1$; $D^-$ occurs at (just less than) $x=0.7$, where $F_n(x)$ is still 0.25 and $F_0(x)=0.7$, so $D^-=-(0.25-0.7)=0.45$. Two statistics are $D=\max(D^+, D^-)$ from @kolmogorov1933foundations, and $V=D^+ + D^-$ from @kuiper1960tests. For our data, these take the values $D=0.45$ and $V=0.55$.  
+
+## Computing statistics and P-values
+
+Package `edfr` will compute all these test statistics, and also obtain (approximate) P-values for them from Table 4.2 of @d1986goodness. It is rather absurd to test for fit based on a sample of size 4, but it can be done for illustration:
+
+```{r}
+library(edfr)
+p.val.tab(v,calc=punif)
+```
+
+The `calc` argument to `p.val.tab` gives the (cumulative distribution function of) the null distribution, here uniform. Note that the statistics `d` and `v` agree with our observations above. The P-values are all greater than 0.25, so that the null hypothesis of uniformity is by no means rejected. This is merely a reflection of the tiny sample size, 4; with such a small sample size, a sample that is actually from a uniform distribution could easily look as non-uniform as ours.
+
+For a more realistic example, let's sample $n=20$ values from a beta distribution:
+
+```{r}
+set.seed(457299)
+w=rbeta(20,2,1)
+hist(w)
+```
+
+This is skewed left, not uniform.
+
+The EDF and null uniform distribution look like this:
+
+```{r}
+fn=ecdf(w)
+plot(fn,xlim=c(0,1))
+abline(a=0,b=1,col="red")
+```
+
+The EDF is far away from the uniform distribution function, with this sample size, and so we hope to reject uniformity:
+
+```{r}
+p.val.tab(w,calc=punif)
+```
+
+
+## References
+

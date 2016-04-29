@@ -2,7 +2,7 @@
 % Please edit documentation in R/pvaltab.R
 \name{p.val.tab}
 \alias{p.val.tab}
-\title{calculate test statistics and P-values from table 4.2}
+\title{Test statistics and P-values from table}
 \usage{
 p.val.tab(x, calc, ...)
 }
@@ -17,6 +17,6 @@ p.val.tab(x, calc, ...)
 data frame of test statistics and P-values
 }
 \description{
-calculate test statistics and P-values from table 4.2
+Calculate test statistic and obtain P-value from table 4.2 of D'Agostino and Stephens (1986).
 }
 

@@ -1,0 +1,60 @@
+@misc{d1986goodness,
+  title={Goodness-of-Fit Techniques, volume 68 of Statistics, textbooks and monographs},
+  author={D’Agostino, Ralph B and Stephens, Michael A},
+  year={1986},
+  publisher={Marcel Dekker Inc}
+}
+
+@Manual{edfr,
+    title = {edfr: Calculate EDF Test Statistics for Goodness of Fit},
+    author = {Ken Butler},
+    year = {2016},
+    note = {R package version 0.1.1},
+    url = {https://github.com/nxskok/edfr.git},
+  }
+
+@Manual{lunar,
+    title = {lunar: Lunar Phase & Distance, Seasons and Other Environmental Factors},
+    author = {Emmanuel Lazaridis},
+    year = {2014},
+    note = {(Version 0.1-04)},
+    url = {http://statistics.lazaridis.eu},
+  }
+
+@Article{lubridate,
+    title = {Dates and Times Made Easy with {lubridate}},
+    author = {Garrett Grolemund and Hadley Wickham},
+    journal = {Journal of Statistical Software},
+    year = {2011},
+    volume = {40},
+    number = {3},
+    pages = {1--25},
+    url = {http://www.jstatsoft.org/v40/i03/},
+  }
+
+@inproceedings{kuiper1960tests,
+  title={Tests concerning random points on a circle},
+  author={Kuiper, Nicolaas H},
+  booktitle={Indagationes Mathematicae (Proceedings)},
+  volume={63},
+  pages={38--47},
+  year={1960},
+  organization={Elsevier}
+}
+
+@article{watson1961goodness,
+  title={Goodness-of-fit tests on a circle},
+  author={Watson, George S},
+  journal={Biometrika},
+  volume={48},
+  number={1/2},
+  pages={109--114},
+  year={1961},
+  publisher={JSTOR}
+}
+
+@article{kolmogorov1933foundations,
+  title={Foundations of probability},
+  author={Kolmogorov, Andrey Nikolaevich},
+  year={1933}
+}

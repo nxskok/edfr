@@ -1,7 +1,7 @@
 Package: edfr
 Type: Package
 Title: Calculate EDF Test Statistics for Goodness of Fit
-Version: 0.1.0
+Version: 0.1.1
 Date: 2016
 Authors@R: person("Ken","Butler",email="butler@utsc.utoronto.ca",role=c("aut","cre"))
 Description: Calculate test statistics and obtain P-values for testing null hypothesis that
@@ -12,5 +12,8 @@ LazyData: TRUE
 RoxygenNote: 5.0.1
 URL: https://github.com/nxskok/edfr.git
 BugReports: https://github.com/nxskok/edfr/issues
-Suggests: testthat
+Suggests: testthat,
+    knitr,
+    rmarkdown
 Depends: R (>= 2.10)
+VignetteBuilder: knitr

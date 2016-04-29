@@ -10,7 +10,7 @@ pval.u2(stat)
 \item{stat}{Test statistic value}
 }
 \value{
-P-value interval (as level of factor)
+P-value interval (as character representation of interval)
 }
 \description{
 P-value for U-squared (modified) from table 4.2
