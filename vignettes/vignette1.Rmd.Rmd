@@ -56,7 +56,7 @@ The extremum statistics are based on the maximum value of $F_n(x)-F_0(x)$, denot
 
 The quadratic statistics $W^2$ and $A^2$ are of the form
 $$ n \int_{-\infty}^{\infty} \{ F_n(x)-F_0(x) \}^2 \psi(x) f_0(x)\; dx$$
-where $f_0(x)$ is the probability density function of the null distribution, and where $\psi(x)=1$ gives the Cram\'{e}r-von Mises statistic $W^2$ and $\psi(x)=1/\{F_0(x)(1-F_0(x)\}$ gives the Anderson-Darling statistic $A^2$ [@anderson1954test]. A third quadratic statistic is $U^2$, with formula given in @d1986goodness, page 100. This is a modification of $W^2$ intended for data on a circle [see @watson1961goodness]. 
+where $f_0(x)$ is the probability density function of the null distribution, and where $\psi(x)=1$ gives the Cram&eacute;r-von Mises statistic $W^2$ and $\psi(x)=1/\{F_0(x)(1-F_0(x)\}$ gives the Anderson-Darling statistic $A^2$ [@anderson1954test]. A third quadratic statistic is $U^2$, with formula given in @d1986goodness, page 100. This is a modification of $W^2$ intended for data on a circle [see @watson1961goodness]. 
 
 ## Computing statistics and P-values
 

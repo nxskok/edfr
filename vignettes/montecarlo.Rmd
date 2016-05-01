@@ -1,0 +1,91 @@
+---
+title: "Obtaining P-values for EDF tests by simulation and checking Table 4.2"
+author: "Ken Butler"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+bibliography: cites.bib
+vignette: >
+  %\VignetteIndexEntry{Obtaining P-values for EDF tests by simulation and checking Table 4.2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+Table 4.2 of @d1986goodness, and accompanying function `p.val.tab` can be used for any "Case 0" test of goodness of fit, that is to say, whenever there are no parameters to be estimated. This includes, for example, uniform on a known interval (typically $(0,1)$), or normal with known mean and SD. Here are a couple of examples:
+
+```{r}
+library(edfr)
+set.seed(457299)
+w=rbeta(20,2,1)
+p.val.tab(w,calc=punif)
+x=rnorm(20,10,3)
+p.val.tab(x,calc=pnorm,10,3)
+```
+
+Vector `w` should fail uniformity, since it is actually drawn from an asymmetric beta distribution, but vector `x` should pass normality with mean 10 and SD 3. These appear to be the case. Note that the null hypothesis for `x` is not just "normal", but "normal with specified mean and SD", so that if we misspecify the mean and SD, normality should fail:
+
+```{r}
+p.val.tab(x,calc=pnorm,20,5)
+```
+
+As indeed it does. Below, we compare the results from Table 4.2 of @d1986goodness with simulated P-values.
+
+Testing for distributions with *estimated* mean and SD, referred to in @d1986goodness as "Case 3", requires different tables. We also investigate this issue below.
+
+## Investigating Table 4.2 by simulation
+
+Function `sim.stat` obtains a simulation distribution of one of the EDF test statistics. For input, it needs: the name of an EDF test statistic, the sample size, the number of simulations (defaults to 10,000), the distribution to simulate from (an r-function), and the distribution to calculate the test statistic for (a p-function). The last two are different partly for annoying technical reasons, and partly as a way of simulating power (by allowing the tested and simulated data to have different distributions). 
+
+Let's start by simulating from data that are uniform on $(0,1)$. We'll start with samples of size 20. We have to do each test statistic in turn, so let's start with $D$:
+
+```{r,cache=TRUE}
+n=20
+D=sim.stat("d",n=n,sim_dist=runif,calc_dist=punif)
+hist(D)
+```
+
+To compare with Table 4.2, we need the modified form of the statistic, which for $D$ is $D(\sqrt{n}+0.12+0.11/\sqrt{n}):
+
+```{r}
+Dmod=D*(sqrt(n)+0.12+0.11/sqrt(n))
+```
+
+The 10\%, 5\% and 1\% points of the distribution of D-modified are respectively 1.224, 1.358 and 1.628, so we compare thus:
+
+```{r}
+table(Dmod>=1.224)
+table(Dmod>=1.358)
+table(Dmod>=1.628)
+```
+
+These should be close to 1000, 500 and 100 respectively, which they are.
+The other way to look at these is to look at the appropriate percentiles of the simulated distribution, and check that they are close to the values in Table 4.2:
+
+```{r}
+crit=c(0.90,0.95,0.99)
+quantile(Dmod,probs=crit)
+```
+
+These seem to be acceptably close to the values 1.224, 1.358, 1.628 given Table 4.2.
+
+Let's repeat the process for $A^2$, which has the advantage that no modification is needed:
+
+```{r,cache=T}
+A2=sim.stat("a2",n=n,sim_dist=runif,calc_dist=punif)
+hist(A2)
+table(A2>=1.933)
+table(A2>=2.492)
+table(A2>=3.880)
+quantile(A2,probs=crit)
+```
+
+This shows good agreement with Table 4.2.
+
+I need to think about Monte Carlo SEs for these.
+
+
+
+## Investigating Case 3
+
+## References

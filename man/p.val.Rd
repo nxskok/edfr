@@ -17,9 +17,7 @@ p.val(statfun, x, nsim = 10000, sim = runif, calc = punif, ...)
 
 \item{calc}{Distribution to calculate test statistic for (p-function)}
 
-\item{...}{Parameters for distribution
-
-#' @export}
+\item{...}{Parameters for distribution}
 }
 \description{
 Calculate EDF test statistic and P-value by simulation
