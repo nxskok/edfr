@@ -106,7 +106,7 @@ p.val=function(statfun,x,nsim=1e4,sim=runif,calc=punif,...) {
 #' @return vector of all test statistic values, labelled by which statistic each one is
 #' @export
 test0=function(x,nsim=1e4,calc=punif,sim=runif,...) {
-  stat.list=c("d","v","w2","u2","a2","dmod","vmod","w2mod","u2mod")
+  stat.list=c("d","v","w2","u2","a2")
   v=sapply(stat.list,p.val,x,nsim,calc=calc,sim=sim,...)
   v
 }

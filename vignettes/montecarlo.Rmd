@@ -10,7 +10,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## Introduction
+# Introduction
 
 Table 4.2 of @d1986goodness, and accompanying function `p.val.tab` can be used for any "Case 0" test of goodness of fit, that is to say, whenever there are no parameters to be estimated. This includes, for example, uniform on a known interval (typically $(0,1)$), or normal with known mean and SD. Here are a couple of examples:
 
@@ -33,59 +33,223 @@ As indeed it does. Below, we compare the results from Table 4.2 of @d1986goodnes
 
 Testing for distributions with *estimated* mean and SD, referred to in @d1986goodness as "Case 3", requires different tables. We also investigate this issue below.
 
-## Investigating Table 4.2 by simulation
+# Investigating Table 4.2 by simulation
+
+
+## Introduction
 
 Function `sim.stat` obtains a simulation distribution of one of the EDF test statistics. For input, it needs: the name of an EDF test statistic, the sample size, the number of simulations (defaults to 10,000), the distribution to simulate from (an r-function), and the distribution to calculate the test statistic for (a p-function). The last two are different partly for annoying technical reasons, and partly as a way of simulating power (by allowing the tested and simulated data to have different distributions). 
+
+## Simulating from uniform data
+
+### Statistic $D$
 
 Let's start by simulating from data that are uniform on $(0,1)$. We'll start with samples of size 20. We have to do each test statistic in turn, so let's start with $D$:
 
 ```{r,cache=TRUE}
 n=20
 D=sim.stat("d",n=n,sim_dist=runif,calc_dist=punif)
-hist(D)
 ```
 
-To compare with Table 4.2, we need the modified form of the statistic, which for $D$ is $D(\sqrt{n}+0.12+0.11/\sqrt{n}):
+To compare with Table 4.2, we need the modified form of the statistic, which for $D$ is $D(\sqrt{n}+0.12+0.11/\sqrt{n})$:
 
 ```{r}
 Dmod=D*(sqrt(n)+0.12+0.11/sqrt(n))
 ```
 
-The 10\%, 5\% and 1\% points of the distribution of D-modified are respectively 1.224, 1.358 and 1.628, so we compare thus:
+The cumulative 75\%, 85\%, 90\%, 95\%, 97.5\%, 99\%, 99.5\% and 99.9\% points of the distribution of D-modified are given in Table 4.2 as 1.019, 1.138, 1.224, 1.358, 1.490, 1.628, 1.731, 1.950 respectively, so we compare thus, noting that `ecdf` will give us the proportion of `Dmod` values less than or equal to these critical values:
 
 ```{r}
-table(Dmod>=1.224)
-table(Dmod>=1.358)
-table(Dmod>=1.628)
+cv=c(1.019, 1.138, 1.224, 1.358, 1.490, 1.628, 1.731, 1.950)
+fn.Dmod=ecdf(Dmod)
+fn.Dmod(cv)
 ```
 
-These should be close to 1000, 500 and 100 respectively, which they are.
+These should be close to 0.75, 0.85, 0.90, 0.95, 0.975, 0.99, 0.995, 0.999 respectively, which they are.
 The other way to look at these is to look at the appropriate percentiles of the simulated distribution, and check that they are close to the values in Table 4.2:
 
 ```{r}
-crit=c(0.90,0.95,0.99)
-quantile(Dmod,probs=crit)
+lev=c(0.75,0.85,0.90,0.95,0.975,0.99,0.995,0.999)
+q=quantile(Dmod,probs=lev)
+q
 ```
 
-These seem to be acceptably close to the values 1.224, 1.358, 1.628 given Table 4.2.
+These seem to be acceptably close to the values given in Table 4.2, apart perhaps from the values at the upper end. The percent relative errors are:
 
-Let's repeat the process for $A^2$, which has the advantage that no modification is needed:
+```{r}
+(q-cv)/cv*100
+```
+
+### Statistic $W^2$
+
+Next, let's try statistic $W^2$:
+
+```{r,cache=TRUE}
+W2=sim.stat("w2",n=n,sim_dist=runif,calc_dist=punif)
+```
+
+```{r}
+W2.mod=(W2-0.4/n+0.6/n^2)/(1+1/n)
+cv=c(0.209,0.284,0.347,0.461,0.581,0.743,0.869,1.167)
+fn.W2=ecdf(W2.mod)
+fn.W2(cv)
+```
+
+These seem not very good: they are all too high, except in the upper tail.
+
+```{r}
+q=quantile(W2,probs=lev)
+q
+```
+
+```{r}
+(q-cv)/cv*100
+```
+
+However, the simulated quantiles are, except in the far tail, within about 1\% of the tabulated values. 
+
+### Statistic $A^2$
+
+Finally, let's repeat the process for $A^2$, which has the advantage that no modification is needed:
 
 ```{r,cache=T}
 A2=sim.stat("a2",n=n,sim_dist=runif,calc_dist=punif)
-hist(A2)
-table(A2>=1.933)
-table(A2>=2.492)
-table(A2>=3.880)
-quantile(A2,probs=crit)
+cv=c(1.248,1.610,1.933,2.492,3.070,3.880,4.5,6)
+fn.A2=ecdf(A2)
+fn.A2(cv)
+q=quantile(A2,probs=lev)
+q
+(q-cv)/cv*100
 ```
 
-This shows good agreement with Table 4.2.
+This shows good agreement with Table 4.2, except in the extreme upper tail, which will be poorly estimated in the tail in any case.
 
-I need to think about Monte Carlo SEs for these.
+## Another example of Case 0: normal data (with known mean and SD)
+
+The Case 0 tables can be used for any distribution with known parameters, not necessarily uniform. For example, normal with mean 10 and SD 3. We'll investigate $A^2$ again:
+
+```{r,cache=T}
+A2.norm=sim.stat("a2",n=n,nsim=10000,sim_dist=rnorm,calc_dist=pnorm,10,3)
+```
+
+```{r}
+fn.A2.norm=ecdf(A2.norm)
+fn.A2.norm(cv)
+q=quantile(A2.norm,probs=lev)
+q
+(q-cv)/cv*100
+```
+
+The agreement is decent, except in the upper tail, where the errors are of similar size *but in the opposite direction* as when simulating from the uniform.
+
+# Investigating Case 3
 
 
+## Introduction
 
-## Investigating Case 3
+What happens if we use Case 0 tables for a situation in which we have estimated parameters? Let's illustrate with testing for normality with mean and SD unknown, so that the null hypothesis is "the underlying distribution is normal with unspecified mean and SD", against an alternative of "it is not normal".
 
-## References
+The procedure we follow is this:
+
+- draw a random sample from a fixed normal distribution (with parameters known to us)
+- estimate the parameters using the sample mean and SD
+- use these to calculate the test statistic of interest
+
+and then we repeat the above many times, and compare the simulated distribution of our statistic with Table 4.2.
+
+## A function to calculate the test statistic for normal distribution with estimated parameters
+
+We'll write a function to mimic the functionality of `sim.stat` for normal distributions, but with the sample mean and SD used instead of the unknown population mean and SD:
+
+```{r}
+sim.stat.est.1=function(teststat,n,true.mean,true.sd) {
+  x=rnorm(n,true.mean,true.sd)
+  calc.stat(teststat,x,pnorm,mean(x),sd(x))
+}
+```
+
+To check that it gives something reasonable:
+
+```{r}
+sim.stat.est.1("w2",20,true.mean=10,true.sd=3)
+```
+
+This seems plausible.
+
+## Running a simulation
+
+Now we run a proper simulation:
+
+```{r,cache=T}
+n=20
+W2=replicate(10000,sim.stat.est.1("w2",n,10,3))
+```
+
+Then we calculate the modified $W^2$ and compare with Table 4.2:
+
+```{r}
+W2.mod=(W2-0.4/n+0.6/n^2)/(1+1/n)
+cv=c(0.209,0.284,0.347,0.461,0.581,0.743,0.869,1.167)
+fn.W2=ecdf(W2.mod)
+fn.W2(cv)
+```
+
+and 
+
+```{r}
+q=quantile(W2.mod,probs=lev)
+q
+```
+
+These are nowhere near the values in Table 4.2; the quantiles of the simulated distribution are all much less than the ones in Table 4.2. This makes sense, on reflection: any data will be closer to *some* normal distribution than to the one with the correct mean and SD, in the same way that the variability of data around the sample mean will be less than the variability of data around the correct mean. 
+
+This demonstrates that we *must not* use Table 4.2 to obtain a P-value for a Case 3 test. 
+
+@d1986goodness indicate that the correct table to use depends on the true distribution (in contrast to Case 0, where the same table applied to any completely-specified distribution). Their Table 4.7 provides correct P-values for this test of normality, against which we can assess our simulation:
+
+```{r}
+lev=c(0.50,0.75,0.85,0.90,0.95,0.975,0.99,0.995)
+cv=c(0.051,0.074,0.091,0.104,0.126,0.148,0.179,0.201)
+```
+
+A different modification to $W^2$ is needed this time:
+
+```{r}
+W2.mod=W2*(1+0.5/n)
+fn.W2.mod=ecdf(W2.mod)
+fn=fn.W2.mod(cv)
+rbind(lev,fn)
+```
+
+The simulated distribution produces P-values very close to those of Table 4.7.
+
+```{r}
+q=quantile(W2.mod,probs=lev)
+rbind(cv,q)
+(q-cv)/cv*100
+```
+
+The simulated quantiles are very close to those from Table 4.7. Indeed, none has a relative error larger than 2\%. 
+
+# Obtaining P-values by simulation
+
+## Introduction
+
+It does not take long to obtain a P-value by simulation, so ths is not unreasonable as a  routine way to obtain a P-value. This avoids the need for tables, or for use of modifications: the distribution of the test statistic itself can be simulated, and the P-value itself is accurate to the scale of the simulation. 
+
+## The leghorn data
+
+These are weights of 20 leghorn chicks, to be tested for normality. First, a Case 0 test, for normality with mean 200 and SD 35. We begin by reproducing the results of Table 4.2:
+
+```{r}
+p.val.tab(leghorn$x,calc=pnorm,200,35)
+```
+
+Then we obtain P-values by simulation (the default 10,000 simulations in each case):
+
+```{r,cache=TRUE}
+test0(leghorn$x,nsim=1e4,calc=pnorm,sim=rnorm,200,35)
+```
+
+
+# References
