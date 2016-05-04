@@ -122,7 +122,7 @@ q
 (q-cv)/cv*100
 ```
 
-This shows good agreement with Table 4.2, except in the extreme upper tail, which will be poorly estimated in the tail in any case.
+This shows good agreement with Table 4.2, except in the extreme upper tail, which will be poorly estimated in any case. (Small proportions are hard to estimate with good *relative* accuracy, unless many simulations are used, more than here.)
 
 ## Another example of Case 0: normal data (with known mean and SD)
 
@@ -235,7 +235,7 @@ The simulated quantiles are very close to those from Table 4.7. Indeed, none has
 
 ## Introduction
 
-It does not take long to obtain a P-value by simulation, so ths is not unreasonable as a  routine way to obtain a P-value. This avoids the need for tables, or for use of modifications: the distribution of the test statistic itself can be simulated, and the P-value itself is accurate to the scale of the simulation. 
+It does not take long to obtain a P-value by simulation, so this is not unreasonable as a  routine way to obtain a P-value. This avoids the need for tables, or for use of modifications: the distribution of the test statistic itself can be simulated, and the P-value itself is accurate to the scale of the simulation. 
 
 ## The leghorn data
 
@@ -245,11 +245,16 @@ These are weights of 20 leghorn chicks, to be tested for normality. First, a Cas
 p.val.tab(leghorn$x,calc=pnorm,200,35)
 ```
 
+These are consistent with @d1986goodness p.\ 104, and the P-values are all greater than 0.25.
+
 Then we obtain P-values by simulation (the default 10,000 simulations in each case):
 
 ```{r,cache=TRUE}
 test0(leghorn$x,nsim=1e4,calc=pnorm,sim=rnorm,200,35)
 ```
 
+The P-values are consistent with Table 4.2.
+
+Now, we test these data for normality with unknown mean and SD (case 3, in other words). 
 
 # References

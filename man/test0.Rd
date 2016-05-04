@@ -5,8 +5,30 @@
 \title{Test statistics and P-values under case 0}
 \usage{
 test0(x, nsim = 10000, calc = punif, sim = runif, ...)
+
+test0(x, nsim = 10000, calc = punif, sim = runif, ...)
 }
 \arguments{
+\item{x}{vector of data}
+
+\item{nsim}{number of simulations to obtain P-value (default 10,000)}
+
+\item{calc}{Cumulative distribution function of null-hypothesis distribution}
+
+\item{sim}{Function  to generate random sample of values from null-hypothesis distribution}
+
+\item{...}{additional parameters for distribution(s)}
+
+\item{statfun}{Name of statistic to be simulated (as in help for \code{calc.stat})}
+
+\item{n}{Sample size for each simulated test statistic}
+
+\item{nsim}{Number of simulations to run (default 10000)}
+
+\item{sim_dist}{Name of R functi#' Test statistics and P-values under case 0
+
+Obtain test statistics and P-values for all statistics under case 0, by simulation}
+
 \item{x}{vector of data}
 
 \item{nsim}{number of simulations to obtain P-value (default 10,000)}
@@ -19,8 +41,12 @@ test0(x, nsim = 10000, calc = punif, sim = runif, ...)
 }
 \value{
 vector of all test statistic values, labelled by which statistic each one is
+
+vector of all test statistic values, labelled by which statistic each one is
 }
 \description{
 Obtain test statistics and P-values for all statistics under case 0, by simulation
+
+Obtain simulations of test statistic under assumption that parameters unknown (for getting P-values).
 }
 

@@ -108,7 +108,103 @@ p.val=function(statfun,x,nsim=1e4,sim=runif,calc=punif,...) {
 test0=function(x,nsim=1e4,calc=punif,sim=runif,...) {
   stat.list=c("d","v","w2","u2","a2")
   v=sapply(stat.list,p.val,x,nsim,calc=calc,sim=sim,...)
-  v
+  data.frame(stat=stat.list,t(v))
+}
+
+#################### case 3
+
+#' One simulation of a test statistic from given distribution, parameters to be estimated (case 3)
+#'
+#' @param statfun Name of statistic to be simulated (as in help for \code{calc.stat})
+#' @param n Sample size for each simulated test statistic
+#' @param sim_dist Name of R function to draw random samples from distribution (eg. \code{rnorm}). Defaults to uniform (\code{runif}).
+#' @param calc_dist Name of R cumulative distribution to calculate test statistic for (eg. \code{pnorm}). Defaults to uniform (\code{punif}).
+#' @param estim function parameters for distribution, apparently same for simulation and calculation
+#' @param ... parameter values from data
+#' @export
+
+sim.stat3.1=function(statfun,n,sim_dist=runif,calc_dist=punif,estim,...) {
+  r=sim_dist(n,...)
+  v=estim(r)
+  stat=calc.stat(statfun,r,calc_dist,v[1],v[2],v[3])
+  stat
 }
 
 
+#' Simulate EDF statistics under Case 3
+#'
+#' Obtain simulations of test statistic under assumption that parameters unknown (for getting P-values).
+#'
+#' @param statfun Name of statistic to be simulated (as in help for \code{calc.stat})
+#' @param n Sample size for each simulated test statistic
+#' @param nsim Number of simulations to run (default 10000)
+#' @param sim_dist Name of R functi#' Test statistics and P-values under case 0
+#'
+#' Obtain test statistics and P-values for all statistics under case 0, by simulation
+#'
+#' @param x vector of data
+#' @param nsim number of simulations to obtain P-value (default 10,000)
+#' @param calc Cumulative distribution function of null-hypothesis distribution
+#' @param sim Function  to generate random sample of values from null-hypothesis distribution
+#' @param ... additional parameters for distribution(s)
+#'
+#' @return vector of all test statistic values, labelled by which statistic each one is
+#' @export
+test0=function(x,nsim=1e4,calc=punif,sim=runif,...) {
+  stat.list=c("d","v","w2","u2","a2")
+  v=sapply(stat.list,p.val,x,nsim,calc=calc,sim=sim,...)
+  data.frame(stat=stat.list,t(v))
+}
+
+#' Simulate test statistics under case 3
+#'
+#' Function to draw random samples from distribution (eg. \code{rnorm}). Defaults to uniform (\code{runif}).
+#' @param calc_dist Name of R function to do probability integral transform with (eg. \code{pnorm}). Defaults to uniform (\code{punif}).
+#' @param estim Function to calculate parameter estimates from data
+#' @param ... parameters for distribution
+#' @export
+
+sim.stat3=function(statfun,n,nsim=10000,sim_dist=runif,calc_dist=punif,estim,...) {
+  replicate(nsim,sim.stat3.1(statfun,n,sim_dist,calc_dist,estim,...))
+}
+
+
+#' EDF test statistic and P-value under case 3
+#'
+#' Calculate EDF test statistic and P-value by simulation, case 3
+#'
+#' @param statfun Character string naming test to do
+#' @param x Vector of data
+#' @param nsim Number of  simulations to run for P-value (default 10,000)
+#' @param sim Distribution to simulate from for P-value (r-function)
+#' @param calc Distribution to calculate test statistic for (p-function)
+#' @param estim Function to return estimated parameters for distribution
+#'
+#' @export
+p.val3=function(statfun,x,nsim=1e4,sim=runif,calc=punif,estim) {
+  pars=estim(x)
+  v=calc.stat(statfun,x,dist=calc,pars[1],pars[2],pars[3])
+  vv=sim.stat3(statfun,length(x),sim_dist=sim,calc_dist=calc,estim,...)
+  tab=table(vv>=v)
+  p.value=tab[2]/sum(tab)
+  list(test.stat=v,p.value=p.value)
+}
+
+
+#' Test statistics and P-values under case 3
+#'
+#' Obtain test statistics and P-values for all statistics under case 0, by simulation
+#'
+#' @param x vector of data
+#' @param nsim number of simulations to obtain P-value (default 10,000)
+#' @param calc Cumulative distribution function of null-hypothesis distribution
+#' @param sim Function  to generate random sample of values from null-hypothesis distribution
+#' @param estim Function to calculate parameter estimates from data
+#'
+#' @return data frame of all test statistic values, labelled by which statistic each one is
+#' @export
+test3=function(x,nsim=1e4,calc=punif,sim=runif,estim) {
+  stat.list=c("d","v","w2","u2","a2")
+  v=sapply(stat.list,p.val3,x,nsim,calc=calc,sim=sim,estim)
+  data.frame(stat=stat.list,t(v))
+}
