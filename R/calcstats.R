@@ -131,30 +131,6 @@ sim.stat3.1=function(statfun,n,sim_dist=runif,calc_dist=punif,estim,...) {
 }
 
 
-#' Simulate EDF statistics under Case 3
-#'
-#' Obtain simulations of test statistic under assumption that parameters unknown (for getting P-values).
-#'
-#' @param statfun Name of statistic to be simulated (as in help for \code{calc.stat})
-#' @param n Sample size for each simulated test statistic
-#' @param nsim Number of simulations to run (default 10000)
-#' @param sim_dist Name of R functi#' Test statistics and P-values under case 0
-#'
-#' Obtain test statistics and P-values for all statistics under case 0, by simulation
-#'
-#' @param x vector of data
-#' @param nsim number of simulations to obtain P-value (default 10,000)
-#' @param calc Cumulative distribution function of null-hypothesis distribution
-#' @param sim Function  to generate random sample of values from null-hypothesis distribution
-#' @param ... additional parameters for distribution(s)
-#'
-#' @return vector of all test statistic values, labelled by which statistic each one is
-#' @export
-test0=function(x,nsim=1e4,calc=punif,sim=runif,...) {
-  stat.list=c("d","v","w2","u2","a2")
-  v=sapply(stat.list,p.val,x,nsim,calc=calc,sim=sim,...)
-  data.frame(stat=stat.list,t(v))
-}
 
 #' Simulate test statistics under case 3
 #'
@@ -184,7 +160,7 @@ sim.stat3=function(statfun,n,nsim=10000,sim_dist=runif,calc_dist=punif,estim,...
 p.val3=function(statfun,x,nsim=1e4,sim=runif,calc=punif,estim) {
   pars=estim(x)
   v=calc.stat(statfun,x,dist=calc,pars[1],pars[2],pars[3])
-  vv=sim.stat3(statfun,length(x),sim_dist=sim,calc_dist=calc,estim,...)
+  vv=sim.stat3(statfun,length(x),nsim=nsim,sim_dist=sim,calc_dist=calc,estim)
   tab=table(vv>=v)
   p.value=tab[2]/sum(tab)
   list(test.stat=v,p.value=p.value)

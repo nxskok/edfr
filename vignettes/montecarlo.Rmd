@@ -1,11 +1,11 @@
 ---
-title: "Obtaining P-values for EDF tests by simulation and checking Table 4.2"
+title: "Obtaining P-values for EDF tests by simulation"
 author: "Ken Butler"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 bibliography: cites.bib
 vignette: >
-  %\VignetteIndexEntry{Obtaining P-values for EDF tests by simulation and checking Table 4.2}
+  %\VignetteIndexEntry{Obtaining P-values for EDF tests by simulation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,7 +23,7 @@ x=rnorm(20,10,3)
 p.val.tab(x,calc=pnorm,10,3)
 ```
 
-Vector `w` should fail uniformity, since it is actually drawn from an asymmetric beta distribution, but vector `x` should pass normality with mean 10 and SD 3. These appear to be the case. Note that the null hypothesis for `x` is not just "normal", but "normal with specified mean and SD", so that if we misspecify the mean and SD, normality should fail:
+Vector `w` should fail uniformity, since it is actually drawn from an asymmetric beta distribution, but vector `x` should pass normality with mean 10 and SD 3. These are the case. Note that the null hypothesis for `x` is not just "normal", but "normal with specified mean and SD", so that if we misspecify the mean and SD, normality should fail:
 
 ```{r}
 p.val.tab(x,calc=pnorm,20,5)
@@ -255,6 +255,91 @@ test0(leghorn$x,nsim=1e4,calc=pnorm,sim=rnorm,200,35)
 
 The P-values are consistent with Table 4.2.
 
-Now, we test these data for normality with unknown mean and SD (case 3, in other words). 
+Now, we test these data for normality with unknown mean and SD (case 3, in other words). First, we need to write a function that returns the sample mean and SD, since these are the two parameters that `pnorm` and `rnorm` expect:
+
+```{r}
+est=function(x) {
+  c(mean(x),sd(x))
+}
+```
+
+Then we can do all the tests with simulated P-values:
+
+```{r,cache=T}
+test3(leghorn$x,nsim=1e4,calc=pnorm,sim=rnorm,estim=est)
+```
+
+There is not the slightest indication of problems with normality. The test statistic values and conclusions are identical to those in @d1986goodness, p.\ 125. 
+
+## Heights of maize plants
+
+The data set `emea` contains heights of 530 maize plants, to be tested for normality:
+
+```{r,cache=T}
+data(emea)
+test3(emea,nsim=1e4,calc=pnorm,sim=rnorm,estim=est)
+```
+
+Why are those P-values missing?
+
+```{r}
+est(emea)
+```
+
+
+## Cinobufagin
+
+Data `chen` are lethal doses of the drug Cinobufagin:
+
+```{r}
+chen
+```
+
+We aim to test the doses for log-normality, thus:
+
+```{r,cache=TRUE}
+estln=function(x) {
+  y=log(x)
+  c(mean(y),sd(y))
+}
+test3(chen,nsim=1e4,calc=plnorm,sim=rlnorm,estim=estln)
+```
+
+Log-normality shows no problems, but what about normality?
+
+
+```{r,cache=T}
+test3(chen,nsim=1e4,calc=pnorm,sim=rnorm,estim=est)
+```
+
+Normality is actually all right as well, though the P-values are smaller.
+
+
+## Fox River, Wisconsin data
+
+The data `baen` are the differences in flood stages for two stations on the Fox River, Wisconsin, to be tested for a Laplace distribution:
+
+```{r}
+baen
+```
+
+The maximum likelihood estimators of the two parameters of the Laplace distribution, as implemented in R, are the median and the mean absolute deviation about the median, so:
+
+```{r}
+estlp=function(x) {
+  m=median(x)
+  dev=abs(x-m)
+  c(m,mean(dev),1)
+}
+```
+
+and then
+
+```{r,cache=T}
+library(VGAM)
+test3(baen,nsim=1e4,calc=plaplace,sim=rlaplace,estim=estlp)
+```
+
+Problems with `lower.tail` here, interacting with passing 3 arguments. Should I prune it back to 2?
 
 # References
